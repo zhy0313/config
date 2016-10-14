@@ -4,21 +4,26 @@
 
 
 ### 使用
+> 安装
+```
+go get github.com/goless/config
+```
+
 > 简单获取
 ```
-config := NewConfig("config_test.json")
+config := config.New("config_test.json")
 d := config.Get("name")
 ```
 
 > 深度获取值
 ```
-config := NewConfig("config_test.json")
+config := config.New("config_test.json")
 c := config.Get("database.host")
 ```
 
 > 获取配置集合
 ```
-config := NewConfig("config_test.json")
+config := config.New("config_test.json")
 m := config.Get("database")
 host := m.(map[string]interface{})["host"]
 ```
