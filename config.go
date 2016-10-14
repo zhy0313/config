@@ -20,23 +20,38 @@ type Config struct {
 //Get name pattern key or key.key.key
 //
 func (c *Config) Get(name string) interface{} {
+
 	if c.maps == nil {
 		c.read()
 	}
 
+	if c.maps == nil {
+		return nil
+	}
+
 	// app.view.path
 	keys := strings.Split(name, ".")
-
-	if len(keys) == 1 {
+	l := len(keys)
+	if l == 1 {
 		return c.maps[name]
 	}
 
 	var ret interface{}
-	for i := 0; i < len(keys); i++ {
-		if ret == nil {
+	for i := 0; i < l; i++ {
+		if i == 0 {
 			ret = c.maps[keys[i]]
+			if ret == nil {
+				return nil
+			}
 		} else {
-			ret = ret.(map[string]interface{})[keys[i]]
+			if m, ok := ret.(map[string]interface{}); ok {
+				ret = m[keys[i]]
+			} else {
+				if l == i-1 {
+					return ret
+				}
+				return nil
+			}
 		}
 	}
 	return ret
